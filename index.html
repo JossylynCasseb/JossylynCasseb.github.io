@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Venda de Produtos</title>
+    <link rel="manifest" href="/manifest.json"/>
+    <script>
+        if(typeof navigator.serviceWorker !== 'undefined'){
+           // navigator.serviceWorker.register('pwabuilder-sw.js')
+            navigator.serviceWorker.register('service-worker.js')
+
+        }
+        // Array para armazenar os itens no carrinho e suas quantidades
+        var carrinho = [];
+
+        // Função para manipular clique no botão "Adicionar ao Carrinho"
+        function adicionarAoCarrinho(produto) {
+             // Adiciona o produto ao carrinho ou incrementa sua quantidade se já estiver no carrinho
+            var encontrado = false;
+            for (var i = 0; i < carrinho.length; i++) {
+                if (carrinho[i].produto === produto) {
+                    carrinho[i].quantidade++;
+                    encontrado = true;
+                    break;
+                }
+            }
+            if (!encontrado) {
+                carrinho.push({produto: produto, quantidade: 1});
+            }
+            
+            // Atualiza o contador de itens no carrinho
+            atualizarContadorCarrinho();
+            
+            // Atualiza a lista de itens no carrinho
+            atualizarListaCarrinho();
+
+            // Exibe a mensagem
+            alert("Produto adicionado ao carrinho: " + produto);
+        }
+        
+        // Função para atualizar o contador de itens no carrinho
+        function atualizarContadorCarrinho() {
+            var contadorElement = document.getElementById('contadorCarrinho');
+            var totalItens = 0;
+            for (var i = 0; i < carrinho.length; i++) {
+                totalItens += carrinho[i].quantidade;
+            }
+            contadorElement.textContent = totalItens;
+        }
+
+        // Função para atualizar a lista de itens no carrinho
+        function atualizarListaCarrinho() {
+            var listaCarrinhoElement = document.getElementById('listaCarrinho');
+            listaCarrinhoElement.innerHTML = '';
+            for (var i = 0; i < carrinho.length; i++) {
+                var item = carrinho[i];
+                var listItem = document.createElement('li');
+                listItem.textContent = item.produto + ' - Quantidade: ' + item.quantidade;
+                listaCarrinhoElement.appendChild(listItem);
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #e8ebbb;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #e8ebbb;
+            color: rgb(0, 0, 0);
+            padding: 10px;
+            text-align: center;
+        }
+        .container {
+            margin: 20px auto;
+            max-width: 800px;
+            padding: 0 20px;
+        }
+        .product {
+            border: 1px solid #4394ce;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .product img {
+            height: 40%;
+            width: 40%;
+            border: 1px solid #4394ce;
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 10px;
+        }
+        .product h2 {
+            margin-top: 0;
+            background-color:#e8ebbb;
+        }
+        .product p {
+            margin-bottom: 0;
+        }
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+        button{
+            background-color: #bcd4e6;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>PRODUTOS PARA COMPUTADOR</h1>
+    </header>
+
+    <div class="container">
+        <div class="product">
+            <img src="./imagens/ssd.jpg" alt="Produto 1">
+            <h2>SSD 480GB Kingston A400</h2>
+            <p>SATA - Leitura 500 MB/s - Gravação 450MB/s - SA400S37/480G</p>
+            <p>Preço: R$ 365,87</p>
+            <!-- Adicionando o evento onclick para chamar a função adicionarAoCarrinho com o nome do produto -->
+            <button class="button" onclick="adicionarAoCarrinho('SSD 480GB Kingston A400')">Adicionar ao Carrinho</button>
+        </div>
+
+        <div class="product">
+            <img src="./placa mae.jpeg" alt="Produto 2">
+            <h2>Placa-Mãe</h2>
+            <p>Placa-Mãe-Asus EX-A320M-Gaming AMD AM4 mATX DDR4</p>
+            <p>Preço: R$ 599,90</p>
+            <!-- Adicionando o evento onclick para chamar a função adicionarAoCarrinho com o nome do produto -->
+            <button class="button" onclick="adicionarAoCarrinho('Placa-Mãe')">Adicionar ao Carrinho</button>
+        </div>
+
+        <div class="product">
+            <img src="./fonte-atx.jpg" alt="Produto 3">
+            <h2>Fonte ATX</h2>
+            <p>Fonte Atx 600w Real Br One Brx Up-s600w Gamer Pfc Ativo</p>
+            <p>Preço: R$ 139,90</p>
+            <!-- Adicionando o evento onclick para chamar a função adicionarAoCarrinho com o nome do produto -->
+            <button class="button" onclick="adicionarAoCarrinho('fonte-atx')">Adicionar ao Carrinho</button>
+        </div>
+        
+    </div>
+    <!-- Adiciona um contador de itens no carrinho -->
+    <div style="text-align: center;">
+        Itens no Carrinho: <span id="contadorCarrinho">0</span>
+    </div>
+
+    <!-- Exibe a lista de itens no carrinho -->
+    <div class="container">
+        <h2>Itens no Carrinho</h2>
+        <ul id="listaCarrinho"></ul>
+    </div>
+    <br><br><br><br><br><br><br><br>
+    <footer>
+        <p>&copy; 2024 jossylyn</p>
+    </footer>
+    <script src="pwabuilder-sw.js"></script> <!--conecta pwa-->
+</body>
+</html>
